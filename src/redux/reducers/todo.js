@@ -5,22 +5,43 @@ const initialState = {
 };
 
 const addTodo = (state, action) => {
-  return { ...state, todos: [...state.todos, action.payload] };
+  const { payload } = action;
+
+  const lastTodo = state.todos[state.todos.length - 1];
+
+  if (lastTodo) {
+    payload.id = lastTodo.id + 1;
+  } else {
+    payload.id = 1;
+  }
+
+  return { ...state, todos: [...state.todos, payload] };
 };
 
 const updateTodo = (state, action) => {
-  const newTodos = [...state.todos];
+  const oldTodos = [...state.todos];
 
-  newTodos[action.payload.id] = { todo: action.payload.todo };
+  const { payload } = action;
+
+  const newTodos = oldTodos.map((element) => {
+    if (element.id === payload.id) {
+      element.todo = payload.todo;
+      return element;
+    }
+
+    return element;
+  });
 
   return { ...state, todos: newTodos };
 };
 
 const deleteTodo = (state, action) => {
   const oldTodos = [...state.todos];
-  const newTodos = oldTodos.filter(
-    (element) => element.todo !== action.payload
-  );
+
+  const { payload } = action;
+
+  const newTodos = oldTodos.filter((element) => element.id !== payload.id);
+
   return { ...state, todos: newTodos };
 };
 
