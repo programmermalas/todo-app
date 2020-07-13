@@ -5,6 +5,8 @@ import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 
 import * as actions from "./redux/actions";
 
+import Input from "./components/Input";
+
 const App = () => {
   const [state, setState] = useState({
     todo: "",
@@ -96,18 +98,11 @@ const App = () => {
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-purple-100">
-      <div className="w-104 shadow-lg bg-purple-400 p-3 mb-5">
-        <form id="form-todo" onSubmit={submitHandler}>
-          <input
-            name="todo"
-            type="text"
-            className="w-full text-xl text-white text-center font-semibold placeholder-white  bg-transparent outline-none"
-            placeholder="Todo Here..."
-            value={state.todo}
-            onChange={inputHandler}
-          />
-        </form>
-      </div>
+      <Input
+        todo={state.todo}
+        onInputHandler={inputHandler}
+        onSubmitHandler={submitHandler}
+      />
 
       <div className="flex flex-col items-center">
         <div className="w-104 shadow-lg bg-white p-10">
