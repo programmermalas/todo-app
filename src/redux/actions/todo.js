@@ -9,19 +9,21 @@ export const add_todo = (todo) => {
   };
 };
 
-export const update_todo = (index, todo) => {
+export const update_todo = (id, todo) => {
   return {
     type: actionTypes.UPDATE_TODO,
     payload: {
-      id: index,
+      id: id,
       todo: todo,
     },
   };
 };
 
-export const delete_todo = (todo) => {
+export const delete_todo = (id) => {
   return {
     type: actionTypes.DELETE_TODO,
-    payload: todo,
+    payload: {
+      id: id,
+    },
   };
 };
