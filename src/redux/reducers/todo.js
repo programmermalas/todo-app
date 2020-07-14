@@ -2,30 +2,34 @@ import * as actionTypes from "../actions/types";
 
 const initialState = {
   todos: [],
+  error: null,
 };
 
-const addTodo = (state, action) => {
-  const { payload } = action;
-
-  const lastTodo = state.todos[state.todos.length - 1];
-
-  if (lastTodo) {
-    payload.id = lastTodo.id + 1;
-  } else {
-    payload.id = 1;
-  }
-
-  return { ...state, todos: [...state.todos, payload] };
+const fetchTodosSuccess = (state, action) => {
+  return { ...state, todos: action.payload };
 };
 
-const updateTodo = (state, action) => {
+const fetchTodosFailure = (state, action) => {
+  return { ...state, error: action.payload.error };
+};
+
+const postTodoSuccess = (state, action) => {
+  return { ...state, todos: [...state.todos, action.payload] };
+};
+
+const postTodoFailure = (state, action) => {
+  return { ...state, error: action.payload.error };
+};
+
+const putTodoSuccess = (state, action) => {
+  const { id, todo } = action.payload;
+
   const oldTodos = [...state.todos];
 
-  const { payload } = action;
-
   const newTodos = oldTodos.map((element) => {
-    if (element.id === payload.id) {
-      element.todo = payload.todo;
+    if (element.id === id) {
+      element.todo = todo;
+
       return element;
     }
 
@@ -35,24 +39,42 @@ const updateTodo = (state, action) => {
   return { ...state, todos: newTodos };
 };
 
-const deleteTodo = (state, action) => {
+const putTodoFailure = (state, action) => {
+  return { ...state, error: action.payload.error };
+};
+
+const deleteTodoSuccess = (state, action) => {
   const oldTodos = [...state.todos];
 
-  const { payload } = action;
-
-  const newTodos = oldTodos.filter((element) => element.id !== payload.id);
+  const newTodos = oldTodos.filter(
+    (element) => element.id !== action.payload.id
+  );
 
   return { ...state, todos: newTodos };
 };
 
+const delete_todo_failure = (state, action) => {
+  return { ...state, error: action.payload.error };
+};
+
 const reducers = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.ADD_TODO:
-      return addTodo(state, action);
-    case actionTypes.UPDATE_TODO:
-      return updateTodo(state, action);
-    case actionTypes.DELETE_TODO:
-      return deleteTodo(state, action);
+    case actionTypes.FETCH_TODOS_SUCCESS:
+      return fetchTodosSuccess(state, action);
+    case actionTypes.FETCH_TODOS_FAILURE:
+      return fetchTodosFailure(state, action);
+    case actionTypes.POST_TODO_SUCCESS:
+      return postTodoSuccess(state, action);
+    case actionTypes.POST_TODO_FAILURE:
+      return postTodoFailure(state, action);
+    case actionTypes.PUT_TODO_SUCCESS:
+      return putTodoSuccess(state, action);
+    case actionTypes.PUT_TODO_FAILURE:
+      return putTodoFailure(state, action);
+    case actionTypes.DELETE_TODO_SUCCESS:
+      return deleteTodoSuccess(state, action);
+    case actionTypes.DELETE_TODO_FAILURE:
+      return delete_todo_failure(state, action);
     default:
       return state;
   }
