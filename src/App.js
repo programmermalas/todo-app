@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
@@ -20,6 +20,10 @@ const App = () => {
   // create dispatch
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(actions.fetchTodos());
+  }, [dispatch]);
+
   // create input handler
   const inputHandler = (event) => {
     const { name, value } = event.target;
@@ -33,9 +37,9 @@ const App = () => {
 
     // if id not 0 update todo else create todo
     if (state.id >= 0) {
-      dispatch(actions.update_todo(state.id, state.todo));
+      dispatch(actions.putTodo(state.id, state.todo));
     } else {
-      dispatch(actions.add_todo(state.todo));
+      dispatch(actions.postTodo(state.todo));
     }
 
     // reset state
@@ -54,7 +58,7 @@ const App = () => {
 
   // create delete handler
   const deleteHandler = (id) => {
-    dispatch(actions.delete_todo(id));
+    dispatch(actions.deleteTodo(id));
   };
 
   // create lists
